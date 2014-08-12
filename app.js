@@ -2,8 +2,8 @@
 var express = require('express'),
     app     = express();
 
-// これは古いので必要ない
-//app.use(app.router);
+// こんな感じにしておけば、静的ファイルへのアクセスは全カバーできる
+app.use(express.static(__dirname + '/public'));
 
 // railsのroutesみたいな感じで書く、postとかもあるよ
 // いくつでも増やせる
@@ -27,6 +27,11 @@ app.get('/users/:name?', function(req, res) {
 // routerには正規表現も使えるよ
 app.get('/items/:id([0-9]+)', function(req, res) {
     res.send('item no: ' + req.params.id);
+});
+
+// ファイルを取得してみる
+app.get('/hello.txt', function(req, res) {
+    res.sendfile(__dirname + '/public/hello.txt');
 });
 
 
