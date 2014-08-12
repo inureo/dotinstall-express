@@ -2,6 +2,8 @@
 var express = require('express'),
     app     = express();
 
+// app.use で読み込まれるものをmiddlewareと呼ぶ、書く順番で適用されていく
+// 静的ファイルの上にrouterを書いておけばrouterが先に適用される
 // こんな感じにしておけば、静的ファイルへのアクセスは全カバーできる
 app.use(express.static(__dirname + '/public'));
 
@@ -31,7 +33,7 @@ app.get('/items/:id([0-9]+)', function(req, res) {
 
 // ファイルを取得してみる
 app.get('/hello.txt', function(req, res) {
-    res.sendfile(__dirname + '/public/hello.txt');
+    res.send('Hello Guest!');
 });
 
 
