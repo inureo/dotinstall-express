@@ -19,6 +19,16 @@ app.use(function(req, res, next) { // next()使う時は引数にnextを！
    next(); // next()がないと
 });
 
+// app.param('hoge')で、対象のparamに対して共通の処理ができる
+app.param('id', function(req, res, next, id) {
+    var users = ['tezuka', 'ryo', 'inureo'];
+    req.params.name = users[id];
+    next();
+});
+
+app.get('/hello/:id', function(req, res) {
+    res.send('ossu! ' + req.params.name);
+});
 
 // railsのroutesみたいな感じで書く、postとかもあるよ
 // いくつでも増やせる
