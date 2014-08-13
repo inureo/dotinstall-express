@@ -2,12 +2,16 @@
 // nodemonを-gでインストールすればnodemon appで毎回再起動しなくてOK
 
 // expressを代入
-var express = require('express');
-var morgan  = require('morgan'); // loggerはmorganへ [expressjs/morgan](https://github.com/expressjs/morgan)
-var app     = express();
+var express    = require('express');
+var morgan     = require('morgan'); // loggerはmorganへ [expressjs/morgan](https://github.com/expressjs/morgan)
+var bodyParser = require('body-parser'); // express.json、express.urlencodedはbody-parserへ [expressjs/body-parser](https://github.com/expressjs/body-parser)
+var app        = express();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // app.use で読み込まれるものをmiddlewareと呼ぶ、書く順番で適用されていく
 // 静的ファイルの上にrouterを書いておけばrouterが先に適用される
@@ -57,6 +61,14 @@ app.get('/items/:id([0-9]+)', function(req, res) {
 // ファイルを取得してみる
 app.get('/hello.txt', function(req, res) {
     res.send('Hello Guest!');
+});
+
+// postはこんな感じ、req.bodyでpost内容がとれる
+app.get('/new', function(req, res) {
+   res.render('new');
+});
+app.post('/create', function(req, res){
+   res.send(req.body.name);
 });
 
 
