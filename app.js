@@ -6,12 +6,15 @@ var express = require('express');
 var morgan  = require('morgan'); // loggerはmorganへ [expressjs/morgan](https://github.com/expressjs/morgan)
 var app     = express();
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 // app.use で読み込まれるものをmiddlewareと呼ぶ、書く順番で適用されていく
 // 静的ファイルの上にrouterを書いておけばrouterが先に適用される
 // こんな感じにしておけば、静的ファイルへのアクセスは全カバーできる
 app.use(morgan('dev')); // loggerは4で名前が変わった
 app.use(express.static(__dirname + '/public'));
-app.use(function(req, res) {
+app.use(function(req, res, next) { // next()使う時は引数にnextを！
    console.log('my custom middleware !');
    next(); // next()がないと
 });
@@ -20,7 +23,7 @@ app.use(function(req, res) {
 // railsのroutesみたいな感じで書く、postとかもあるよ
 // いくつでも増やせる
 app.get('/', function(req, res) {
-    res.send('Hello world')
+    res.render('index', { title: 'title' }); // オブジェクト渡せるよ〜
 });
 app.get('/about', function(req, res) {
     res.send('about this page')
