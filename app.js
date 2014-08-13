@@ -1,11 +1,21 @@
+// node appでアプリ起動
+// nodemonを-gでインストールすればnodemon appで毎回再起動しなくてOK
+
 // expressを代入
-var express = require('express'),
-    app     = express();
+var express = require('express');
+var morgan  = require('morgan'); // loggerはmorganへ [expressjs/morgan](https://github.com/expressjs/morgan)
+var app     = express();
 
 // app.use で読み込まれるものをmiddlewareと呼ぶ、書く順番で適用されていく
 // 静的ファイルの上にrouterを書いておけばrouterが先に適用される
 // こんな感じにしておけば、静的ファイルへのアクセスは全カバーできる
+app.use(morgan('dev')); // loggerは4で名前が変わった
 app.use(express.static(__dirname + '/public'));
+app.use(function(req, res) {
+   console.log('my custom middleware !');
+   next(); // next()がないと
+});
+
 
 // railsのroutesみたいな感じで書く、postとかもあるよ
 // いくつでも増やせる
